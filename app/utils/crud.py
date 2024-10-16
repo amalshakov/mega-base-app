@@ -25,6 +25,24 @@ async def insert_user(
         )
 
 
+async def insert_users(users: list[dict[str, int]]):
+    insert_query = """
+    INSERT INTO users (username, email, number_upload_files, name_top_file)
+    VALUES (:username, :email, :number_upload_files, :name_top_file);
+    """
+    async with db_helper.engine.begin() as conn:
+        for user in users:
+            await conn.execute(
+                text(insert_query),
+                {
+                    "username": user["username"],
+                    "email": user["email"],
+                    "number_upload_files": user["number_upload_files"],
+                    "name_top_file": user["name_top_file"],
+                },
+            )
+
+
 async def update_user(
         user_id,
         username: str = None,
