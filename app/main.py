@@ -3,8 +3,9 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 import uvicorn
 
+from api.v1.views.endpoints import router as router_v1
 from config import settings
-from utils import crud, db_helper
+from core.db_helper import db_helper
 
 
 @asynccontextmanager
