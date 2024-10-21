@@ -3,8 +3,8 @@ import os
 
 from dotenv import load_dotenv
 
-from core import crud
 from core import utils
+from core.db import db
 
 load_dotenv()
 
@@ -44,18 +44,18 @@ USERS_FOR_DB = [
 
 
 async def main():
-    # await crud.insert_user("jacob", "jacob@example.fake", 33, "dogs.pdf")
-    # await crud.insert_users(USERS_FOR_DB)
+    # await db.insert_user("jacob", "jacob@example.fake", 33, "dogs.pdf")
+    # await db.insert_users(USERS_FOR_DB)
 
-    # await crud.update_user(user_id=1, number_upload_files=1111, name_top_file="it.doc")
+    # await db.update_user(user_id=1, number_upload_files=1111, name_top_file="it.doc")
 
-    # users = await crud.get_info_all_users()
+    # users = await db.get_info_all_users()
     # print(users)
 
-    # users = await crud.get_info_all_users_by_top_file("cats.jpeg")
+    # users = await db.get_info_all_users_by_top_file("cats.jpeg")
     # print(users)
 
-    sorted_users_by_uploads = utils.sort_users_by_uploads(await crud.get_info_all_users())
+    sorted_users_by_uploads = utils.sort_users_by_uploads(await db.get_info_all_users())
     print(sorted_users_by_uploads)
 
 

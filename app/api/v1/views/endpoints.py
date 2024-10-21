@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from core import crud
+from core.db import db
 
 router = APIRouter()
 
@@ -12,4 +12,4 @@ async def index():
 
 @router.get("/info")
 async def info():
-    return await crud.get_info_all_users()
+    return await db.get_info_all_users()

@@ -5,16 +5,16 @@ import uvicorn
 
 from api.v1.views.endpoints import router as router_v1
 from config import settings
-from core.db_helper import db_helper
+from core.db import db
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # startup
-    await db_helper.create_tables()
+    await db.create_tables()
     yield
     # shutdown
-    await db_helper.dispose()
+    await db.dispose()
 
 
 main_app = FastAPI(lifespan=lifespan)
