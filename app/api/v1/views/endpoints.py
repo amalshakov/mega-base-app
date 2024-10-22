@@ -1,6 +1,7 @@
 from fastapi import APIRouter
 
 from core.db import db
+from core.utils import sort_users_by_uploads
 
 router = APIRouter()
 
@@ -12,4 +13,6 @@ async def index():
 
 @router.get("/info")
 async def info():
-    return await db.get_info_all_users()
+    users = await db.get_info_all_users()
+    sorted_users_by_uploads = sort_users_by_uploads(users)
+    return f"Топ пользователей по выгрузке файлов: {sorted_users_by_uploads}"
