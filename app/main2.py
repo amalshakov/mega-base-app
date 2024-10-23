@@ -3,8 +3,9 @@ import os
 
 from dotenv import load_dotenv
 
-from core import utils
 from core.db import db
+from core import utils
+from core.regex import validate_email
 
 load_dotenv()
 
@@ -44,10 +45,14 @@ USERS_FOR_DB = [
 
 
 async def main():
-    # await db.insert_user("jacob", "jacob@example.fake", 33, "dogs.pdf")
+    # await db.create_tables()
+    # await db.insert_user("jorgie", "jorgie@example.fake", 72, "dogs.pdf")
     # await db.insert_users(USERS_FOR_DB)
 
-    # await db.update_user(user_id=1, number_upload_files=1111, name_top_file="it.doc")
+    # await db.update_user(user_id=1, username=None)
+    # await db.update_user(user_id=1, email=None)
+    # await db.update_user(user_id=1, number_upload_files=99913)
+
 
     # users = await db.get_info_all_users()
     # print(users)
@@ -55,8 +60,12 @@ async def main():
     # users = await db.get_info_all_users_by_top_file("cats.jpeg")
     # print(users)
 
-    sorted_users_by_uploads = utils.sort_users_by_uploads(await db.get_info_all_users())
-    print(sorted_users_by_uploads)
+    # sorted_users_by_uploads = utils.sort_users_by_uploads(await db.get_info_all_users())
+    # print(sorted_users_by_uploads)
+
+    while True:
+        email = input("Введите email: ")
+        validate_email(email)
 
 
 if __name__ == "__main__":
