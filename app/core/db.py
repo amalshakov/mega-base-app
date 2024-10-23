@@ -44,7 +44,7 @@ class DB:
             )
             async with self.engine.begin() as conn:
                 await conn.execute(query)
-                logger.info("Таблица 'users' успешно создана или уже существует.")
+                logger.info("Таблица 'users' успешно создана.")
         except Exception as error:
             logger.error(f"Ошибка при создании таблицы: '{error}'")
             raise
