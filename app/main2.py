@@ -1,14 +1,14 @@
-import asyncio
 import os
+import asyncio
 
 from dotenv import load_dotenv
 
 from core.db import db
 from core import utils
 from core.regex import validate_email
+from core.utils import get_email_from_full_name
 
 load_dotenv()
-
 
 USERS_FOR_DB = [
     {
@@ -45,9 +45,10 @@ USERS_FOR_DB = [
 
 
 async def main():
+
     # await db.create_tables()
     # await db.insert_user("jorgie", "jorgie@example.fake", 72, "dogs.pdf")
-    # await db.insert_users(USERS_FOR_DB)
+    await db.insert_users(USERS_FOR_DB)
 
     # await db.update_user(user_id=1, username=None)
     # await db.update_user(user_id=1, email=None)
@@ -63,9 +64,11 @@ async def main():
     # sorted_users_by_uploads = utils.sort_users_by_uploads(await db.get_info_all_users())
     # print(sorted_users_by_uploads)
 
-    while True:
-        email = input("Введите email: ")
-        validate_email(email)
+    # while True:
+    #     email = input("Введите email: ")
+    #     validate_email(email)
+    #     snp = input("Введите ФИО (в формате: Фамилия Имя Отчество): ")
+    #     print(get_email_from_full_name(snp))
 
 
 if __name__ == "__main__":

@@ -6,8 +6,8 @@ from sqlalchemy.ext.asyncio import (
 )
 from sqlalchemy.exc import SQLAlchemyError
 
-from config import settings
 from core.log import get_logger
+from config import settings
 
 
 logger = get_logger()
@@ -161,7 +161,6 @@ class DB:
         except Exception as error:
             logger.error(f"Ошибка при запросе к БД на получение всех пользователей с полем 'name_top_file': '{name_top_file}'. Ошибка: '{error}'")
             raise
-
 
 db = DB(
     url=str(settings.db.url),

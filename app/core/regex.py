@@ -12,17 +12,24 @@ invalid_email = [
 ]
 
 
-def validate_email(email: str):
+def validate_email(
+        email: str,
+        surname: str,
+        name: str,
+        patronymic: str,
+) -> str:
     pattern = r"^[a-z]+\.[a-z]+@megafon\.ru$"
 
     if re.match(pattern, email):
-        if email not in valid_email:
-            valid_email.append(email)
-            print("Ваш email валиден. Добавлен в массив valid_email.")
-            print(valid_email)
-        else:
-            print("Ваш email валиден. Но уже существует.")
+        if email in valid_email:
+            email = f"{name}.{patronymic[:2]}.{surname}@megafon.ru"
+            if email in valid_email:
+                print(f"Ваш email '{email}' УЖЕ занят. Обратитесь к администратору!")
+                return email
+        valid_email.append(email)
+        print(f"Ваш email '{email}' валиден. Добавлен в массив valid_email.")
+        return email
     else:
         invalid_email.append(email)
-        print("Ваш email не валиден! Добавлен в массив invalid_email.")
-        print(invalid_email)
+        print(f"Ваш email '{email}' не валиден! Добавлен в массив invalid_email.")
+        return email
