@@ -1,6 +1,9 @@
 from transliterate import translit
 
+from core.log import get_logger
 from .regex import validate_email
+
+logger = get_logger()
 
 def sort_users_by_uploads(users: list[dict[str, int]]):
     n = len(users)
@@ -22,10 +25,13 @@ def sort_users_by_uploads2(users: list[dict[str, int]]):
 
 
 def get_email_from_full_name(full_name: str):
-    if len(full_name.split()) == 3:
+    if len(full_name.strip().split()) == 3 and full_name.replace(" ", "").isalpha():
+        logger.info(f"В графу ФИО пользователь ввел: '{full_name}'. Принято.")
         latin_full_name = translit(full_name, "ru", reversed=True)
-        surname, name, patronymic = latin_full_name.replace("'", "").lower().split()
+        surname, name, patronymic = latin_full_name.replace("'", "").strip().lower().split()
     else:
-        return "Ошибка! Введите ФИО в формате: Фамилия Имя Отчество. Например: Иванов Иван Иванович"
+        print("Ошибка! Введите ФИО в формате: Фамилия Имя Отчество. Например: Иванов Иван Иванович")
+        logger.info(f"В графу ФИО пользователь ввел: '{full_name}'. Отклонено.")
+        return False
     current_email = f"{name}.{surname}@megafon.ru"
     return validate_email(current_email, surname, name, patronymic)
