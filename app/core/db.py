@@ -31,20 +31,27 @@ class DB:
 
     async def create_tables(self):
         try:
-            query = text(
-                "CREATE TABLE IF NOT EXISTS users "
-                "("
-                "id SERIAL PRIMARY KEY, "
-                "username VARCHAR(50) NOT NULL, "
-                "email VARCHAR(100) NOT NULL UNIQUE, "
-                "number_upload_files INT, "
-                "name_top_file VARCHAR(255)"
-                ")"
-                ";"
-            )
+            check_query = text("SELECT to_regclass('public.users');")
             async with self.engine.begin() as conn:
-                await conn.execute(query)
-                logger.info("Таблица 'users' успешно создана.")
+                result = await conn.execute(check_query)
+                table_exists = result.scalar() is not None
+
+            if not table_exists:
+                create_query = text(
+                    "CREATE TABLE users "
+                    "("
+                    "id SERIAL PRIMARY KEY, "
+                    "username VARCHAR(50) NOT NULL, "
+                    "email VARCHAR(100) NOT NULL UNIQUE, "
+                    "number_upload_files INT, "
+                    "name_top_file VARCHAR(255)"
+                    ")"
+                    ";"
+                )
+                async with self.engine.begin() as conn:
+                    await conn.execute(create_query)
+                    logger.info("Таблица 'users' успешно создана.")
+
         except Exception as error:
             logger.error(f"Ошибка при создании таблицы: '{error}'")
             raise
@@ -98,7 +105,7 @@ class DB:
                             "name_top_file": user.get("name_top_file"),
                         },
                     )
-                    logger.info(f"Пользователь '{user['username']}' с email '{user['email']}' успешно добавлен.")
+                    logger.info(f"Пользователь '{user['username']}' с email '{user['email']}' успешно добавлен в БД.")
         except Exception as error:
             logger.error(f"Ошибка при добавлении пользователя '{user['username']}' с email '{user['email']}': {error}")
             raise
