@@ -9,8 +9,8 @@ class RunConfig(BaseModel):
 
 class DatabaseConfig(BaseModel):
     url: PostgresDsn
-    echo: bool = True
-    echo_pool: bool = True
+    echo: bool = False
+    echo_pool: bool = False
 
 
 class Settings(BaseSettings):
