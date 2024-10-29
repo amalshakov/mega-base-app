@@ -4,11 +4,8 @@ from sqlalchemy.ext.asyncio import (
     AsyncEngine,
     create_async_engine,
 )
-from sqlalchemy.exc import SQLAlchemyError
 
-from core.log import get_logger
-from config import settings
-
+from app.core.log import get_logger
 
 logger = get_logger()
 
@@ -27,9 +24,15 @@ class DB:
         )
 
     async def dispose(self):
+        """Закрывает соединение с базой данных."""
         await self.engine.dispose()
 
     async def create_tables(self):
+        """
+        Создает таблицы в базе данных, если они не существуют.
+
+        Проверяет наличие таблицы 'users' и создает ее, если она отсутствует.
+        """
         try:
             check_query = text("SELECT to_regclass('public.users');")
             async with self.engine.begin() as conn:
@@ -63,6 +66,7 @@ class DB:
         number_upload_files: int = 0,
         name_top_file: str = None,
     ):
+        """Вставляет нового пользователя в таблицу 'users'."""
         try:
             query = text(
                 "INSERT INTO users (username, email, number_upload_files, name_top_file) "
@@ -88,6 +92,7 @@ class DB:
         self,
         users: list[dict[str, int]],
     ):
+        """Вставляет нескольких пользователей в таблицу 'users'."""
         try:
             query = text(
                 "INSERT INTO users (username, email, number_upload_files, name_top_file) "
@@ -114,6 +119,7 @@ class DB:
         self,
         user_id: int, **kwargs,
     ):
+        """Обновляет поля пользователя в таблице 'users'."""
         try:
             async with self.engine.begin() as conn:
                 for key, value in kwargs.items():
@@ -138,6 +144,7 @@ class DB:
             raise
 
     async def get_info_all_users(self):
+        """Получает массив всех пользователей из таблицы 'users'."""
         try:
             query = text("SELECT * FROM users;")
             async with self.engine.begin() as conn:
@@ -168,9 +175,3 @@ class DB:
         except Exception as error:
             logger.error(f"Ошибка при запросе к БД на получение всех пользователей с полем 'name_top_file': '{name_top_file}'. Ошибка: '{error}'")
             raise
-
-db = DB(
-    url=str(settings.db.url),
-    echo=settings.db.echo,
-    echo_pool=settings.db.echo_pool,
-)
