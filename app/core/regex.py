@@ -1,6 +1,6 @@
 import re
 
-from core.log import get_logger
+from app.core.log import get_logger
 
 logger = get_logger()
 
@@ -24,7 +24,22 @@ def validate_email(
         surname: str,
         name: str,
         patronymic: str,
-):
+) -> str or bool:
+    """
+    Проверяет валидность email-адреса и при необходимости формирует новый email на основе переданных ФИО.
+
+    Функция проверяет, соответствует ли переданный email заданному шаблону.
+    Если email валиден и уже существует в списке valid_email, формируется новый email
+    на основе имени, фамилии и отчества. Если новый email также занят, выводится сообщение
+    об ошибке. Если email не валиден, он добавляется в список invalid_email.
+
+    Args:
+        email (str): Email-адрес для проверки.
+        surname (str): Фамилия пользователя.
+        name (str): Имя пользователя.
+        patronymic (str): Отчество пользователя.
+    """
+
     pattern = r"^[a-z]+\.[a-z]+@megafon\.ru$"
 
     if re.match(pattern, email):

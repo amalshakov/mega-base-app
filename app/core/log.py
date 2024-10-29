@@ -6,6 +6,13 @@ def get_logger(
         log_level: str = 'INFO',
         log_file: str = "app.log"
 ) -> logging.Logger:
+    """
+    Создает и настраивает логгер для приложения.
+
+    Эта функция создает директорию для логов, если она не существует,
+    настраивает уровень логирования и формат вывода сообщений, а также
+    создает файл для записи логов.
+    """
     log_dir = "logs"
     if not os.path.exists(log_dir):
         os.makedirs(log_dir)
