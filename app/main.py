@@ -4,11 +4,9 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 import uvicorn
 
-from api.v1.views.endpoints import router as router_v1
-from config import settings
-from core.db import db
-from core.utils import get_email_from_full_name
-from users_for_db import USERS_FOR_DB
+from app.api.v1.views.endpoints import router as router_v1
+from app.config import db, settings, USERS_FOR_DB
+from app.core.utils import get_email_from_full_name
 
 
 @asynccontextmanager
@@ -16,13 +14,12 @@ async def lifespan(app: FastAPI):
     yield
     await db.dispose()
 
-
 main_app = FastAPI(lifespan=lifespan)
 main_app.include_router(router_v1)
 
 async def run_fastapi():
     uvicorn.run(
-        "main:main_app",
+        "app.main:main_app",
         host=settings.run.host,
         port=settings.run.port,
         reload=True,
